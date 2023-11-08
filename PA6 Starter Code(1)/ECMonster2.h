@@ -26,6 +26,27 @@ class ECCombatant;
 //    ReceiveAttack()
 //    Attack()
 
+class ECReplicator: public ECMonster
+{
+public:
+    ECReplicator(const std::string &tid, ECDungeon* dungeon ,int tmStart, int tmEnd);
+    ECReplicator(const std::string &tid, ECDungeon* dungeon ,int tmStart, int tmEnd, bool onheap);
+    bool IsDead() const;
+    void TakeTurn(ECCombatant* target);
+    void ReceiveAttack(int sufferedDamage);
+    void Attack(ECCombatant* fighter) const;
+    ECDungeon* getDungeon() const {return dungeon;}
+    bool OnHeap() const;
+    int getHealth() const { return health; }
+    int getDamage() const { return damage; }
+private:
+    ECReplicator* MakeCopy() const;
+    ECDungeon* dungeon;
+    int health;
+    int damage;
+    bool on_heap;
+};
+
 //***********************************************************
 // Horde: a collection of monsters that can all attack in one turn but can only be attacked one at a time.
 

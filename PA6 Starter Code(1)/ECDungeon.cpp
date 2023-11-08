@@ -13,7 +13,7 @@ using namespace std;
 //    void SimulateTurn();
 //    void AddMonster(ECMonster* monster);
 
-ECDungeon::ECDungeon (ECFighter* fighterIn): turn(0), remainingMonsters(), fighter(fighterIn) {}
+ECDungeon::ECDungeon (ECFighter *fighterIn): turn(0), remainingMonsters(), fighter(fighterIn) {}
 
 int ECDungeon::SimulateDungeon()
 {
@@ -21,6 +21,7 @@ int ECDungeon::SimulateDungeon()
     ECMonster* cur_monster = remainingMonsters[0];
     while(!remainingMonsters.empty())
     {
+        cout << "turn: " << turns_taken << endl;
         SimulateTurn();
         turns_taken++;
         if(fighter->IsDead())
@@ -46,7 +47,7 @@ void ECDungeon::SimulateTurn()
 
 }
 
-void ECDungeon::AddMonster(ECMonster* monster)
+void ECDungeon::AddMonster(ECMonster *monster)
 {
     remainingMonsters.push_back(monster);
 }

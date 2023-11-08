@@ -16,13 +16,13 @@ class ECMonster;
 
 class ECDungeon {
 public:
-    ECDungeon(ECFighter* fighterIn);
+    ECDungeon(ECFighter *fighterIn);
     
     int SimulateDungeon();
 
     void SimulateTurn();
     
-    void AddMonster(ECMonster* monster);
+    void AddMonster(ECMonster *monster);
     
 private:
     int turn;

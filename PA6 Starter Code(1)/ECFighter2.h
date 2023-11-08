@@ -53,7 +53,7 @@ public:
     ECAcrobat(const std::string &IDIn, int healthIn, int damageIn);
 
     bool IsDead() const {return getHealth() <= 0;}
-    void TakeTurn(ECCombatant* monsterToAttack);
+    void TakeTurn(ECCombatant *monsterToAttack);
     void ReceiveAttack(int damageSuffered);
     int getDodgeCooldown() const {return _dodge_cooldown;}
 
