@@ -22,6 +22,19 @@ class ECCombatant;
 //    ReceiveAttack()
 //    Attack()
 
+class ECBrute: public ECFighter
+{
+public:
+    ECBrute(const std::string &IDIn, int healthIn, int damageIn);
+
+    bool IsDead() const {return getHealth() <= 0;}
+    void TakeTurn(ECCombatant* monsterToAttack);
+    void ReceiveAttack(int damageSuffered);
+    //void Attack(ECCombatant* target) const;
+    //attack doesn't need a declaration, it can just use the fighter attack method
+
+};
+
 
 //***********************************************************
 // Acrobat - A fighter that can dodge an attack every 4 turns
@@ -33,6 +46,24 @@ class ECCombatant;
 //    TakeTurn()
 //    ReceiveAttack()
 //    Attack()
+
+class ECAcrobat: public ECFighter
+{
+public:
+    ECAcrobat(const std::string &IDIn, int healthIn, int damageIn);
+
+    bool IsDead() const {return getHealth() <= 0;}
+    void TakeTurn(ECCombatant* monsterToAttack);
+    void ReceiveAttack(int damageSuffered);
+    int getDodgeCooldown() const {return _dodge_cooldown;}
+
+protected:
+    void setDodgeCooldown(int newCooldown) {_dodge_cooldown = newCooldown;}
+
+private:
+    int _dodge_cooldown;
+
+};
 
 
 

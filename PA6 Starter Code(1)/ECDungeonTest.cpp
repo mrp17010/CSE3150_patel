@@ -114,7 +114,7 @@ static void Test3()
     ASSERT_EQ(m3.IsDead(), true);
 }
 
-// Monster Test - Knight and Replicator
+Monster Test - Knight and Replicator
 static void Test4()
 {
     cout << "****Test4\n";
