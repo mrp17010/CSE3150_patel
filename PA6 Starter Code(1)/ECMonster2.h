@@ -58,6 +58,20 @@ private:
 //    ReceiveAttack()
 //    Attack()
 
+class ECHorde: public ECMonster
+{
+public:
+    ECHorde(const std::string &tid);
+    bool IsDead() const;
+    void TakeTurn(ECCombatant* target);
+    void ReceiveAttack(int sufferedDamage);
+    void Attack(ECCombatant *fighter) const;
+    void AddMonster(ECMonster *monster);
+    ECMonster* getCurrentMonster() {return _monsters[0];}
+private:
+    std::vector<ECMonster*> _monsters;
+};
+
 
 
 #endif /* ECMonster2_h */

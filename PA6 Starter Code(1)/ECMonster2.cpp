@@ -69,3 +69,34 @@ void ECReplicator::ReceiveAttack(int sufferedDamage)
 //    TakeTurn()
 //    ReceiveAttack()
 //    Attack()
+
+ECHorde::ECHorde(const std::string &mID):ECMonster(mID), _monsters() {}
+bool ECHorde::IsDead() const
+{
+    return _monsters.empty();
+}
+void ECHorde::TakeTurn(ECCombatant *target)
+{
+    Attack(target);
+}
+void ECHorde::Attack(ECCombatant *fighter) const
+{
+    for(auto iter = _monsters.begin(); iter != _monsters.end(); iter++)
+    {
+        ECMonster *cur_monster = *iter;
+        cur_monster->TakeTurn(fighter);
+    }
+}
+void ECHorde::ReceiveAttack(int sufferedDamage)
+{
+    ECMonster *cur_monster = getCurrentMonster();
+    cur_monster->ReceiveAttack(sufferedDamage);
+    if(cur_monster->IsDead())
+    {
+        _monsters.erase(_monsters.begin());
+    }
+}
+void ECHorde::AddMonster(ECMonster *monster)
+{
+    _monsters.push_back(monster);
+}
