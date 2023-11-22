@@ -17,7 +17,7 @@ using namespace std;
 
 ECBrute::ECBrute (const std::string &IDIn, int healthIn, int damageIn): ECFighter(IDIn, healthIn, damageIn) {}
 
-void ECBrute::TakeTurn(ECCombatant* monsterToAttack)
+void ECBrute::TakeTurn(ECCombatant *monsterToAttack)
 {
     Attack(monsterToAttack);
     if (monsterToAttack->IsDead()) //if monster is dead after attack
@@ -40,7 +40,7 @@ void ECBrute::ReceiveAttack(int damageInflicted)
 
 ECAcrobat::ECAcrobat (const std::string &IDIn, int healthIn, int damageIn): ECFighter(IDIn, healthIn, damageIn), _dodge_cooldown(0) {}
 
-void ECAcrobat::TakeTurn(ECCombatant* monsterToAttack)
+void ECAcrobat::TakeTurn(ECCombatant *monsterToAttack)
 {
     int cur_cooldown = getDodgeCooldown();
     Attack(monsterToAttack);
