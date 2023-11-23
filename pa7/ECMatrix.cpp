@@ -72,7 +72,7 @@ const T& ECMatrix<T>::operator()(const std::vector<unsigned>& indices)const
 {
     if(indices.size() != dimensions.size())
     {
-        throw out_of_range();
+        throw out_of_range("indicies out of range");
     }
 
     return matrix[indices[0]][indices[1]];   
@@ -83,7 +83,7 @@ T& ECMatrix<T>::operator()(const std::vector<unsigned>& indices)
 {
     if(indices.size() != dimensions.size())
     {
-        throw out_of_range();
+        throw out_of_range("indicies out of range");
     }
 
     return matrix[indices[0]][indices[1]];
