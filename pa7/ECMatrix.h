@@ -46,9 +46,9 @@ public:
     friend ECMatrix operator*(const ECMatrix& mat1, const ECMatrix& mat2);
 
     // // Scalar Operations
-    
-    template <typename U>
-    friend ECMatrix operator+(const ECMatrix& mat1, const U scalar);
+
+    // template <typename U>
+    // friend ECMatrix operator+(const ECMatrix& mat1, const U scalar);
 
     //reverse scalar operators
 

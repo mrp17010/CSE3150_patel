@@ -173,22 +173,5 @@ ECMatrix<U> operator*(const ECMatrix<U>& mat1, const ECMatrix<U> mat2)
 }
 
 
-template <typename U>
-ECMatrix<U> operator+(const ECMatrix<U>& mat1, const U scalar)
-{
-    vector<unsigned> mat1_d = mat1.getDimensions();
 
-    vector<U> newelements;
-
-    for(unsigned i = 0; i<mat1_d[0]; i++)
-    {
-        for(unsigned j = 0; j<mat1_d[1];j++)
-        {
-            U value = mat1({i, j}) + scalar;
-            newelements.push_back(value);
-        }
-    }
-    ECMatrix<U> newmatrix(mat1_d, newelements);
-    return newmatrix;
-}
 
