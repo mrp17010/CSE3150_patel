@@ -1,0 +1,40 @@
+@startuml
+
+' Define interface
+interface ECSubscriber {
+  +Update(): void
+  +ContractCost(): int
+}
+
+' Define classes
+class ECTrendingNews {
+  -subscribers: vector<ECSubscriber*>
+  -totalRevenue: int
+  +Subscribe(subscriber: ECSubscriber*): void
+  +UnSubscribe(subscriber: ECSubscriber*): void
+  +Notify(): void
+  +GetTotRevenue(): int
+}
+
+class ECPayPerClickSubscriber {
+  -readCount: int
+  -newsProvider: ECTrendingNews
+  +ECPayPerClickSubscriber(provider: ECTrendingNews)
+  +Update(): void
+  +ContractCost(): int
+}
+
+class ECContractSubscriber {
+  -contractFee: int
+  -newsProvider: ECTrendingNews
+  +ECContractSubscriber(provider: ECTrendingNews)
+  +Update(): void
+  +ContractCost(): int
+}
+
+' Define relationships
+ECTrendingNews "0..*" -left-> "1" ECSubscriber : notifies >
+ECSubscriber <|.. ECPayPerClickSubscriber : implements
+ECSubscriber <|.. ECContractSubscriber : implements
+
+@enduml
