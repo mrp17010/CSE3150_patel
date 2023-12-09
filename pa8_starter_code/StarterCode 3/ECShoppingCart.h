@@ -18,7 +18,11 @@ public:
 
   void removeFromCart(Product* product);
   void removeFromCart(int productId);
-  void clearCart(); 
+  void clearCart();
+  std::vector<Product*> getItems();
+
+private:
+  std::vector<Product*> items;
 };
 
 #endif  // ECSHOPPINGCART_H
