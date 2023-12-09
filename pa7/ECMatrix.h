@@ -5,7 +5,7 @@
 #include <iostream>
 #include <stdexcept>
 
-template <typename T>
+template <typename T> 
 class ECMatrix {
 private:
     std::vector<std::vector<T>> matrix; // Nested vectors to store 2D matrix
@@ -15,37 +15,43 @@ public:
     // Constructor that accepts dimensions and elements
     ECMatrix(const std::vector<unsigned>& _dimensions, const std::vector<T>& elements);
 
-    // Check if the elements vector matches the specified dimensions
+    // // Check if the elements vector matches the specified dimensions
     bool isValidInput(const std::vector<T>& elements) const;
 
-    // Destructor
+    // // Destructor
     virtual ~ECMatrix();
 
-    // for reference on noexcept https://en.cppreference.com/w/cpp/language/noexcept_spec
+    // // for reference on noexcept https://en.cppreference.com/w/cpp/language/noexcept_spec
     ECMatrix(const ECMatrix& other); // Copy constructor
     ECMatrix(ECMatrix&& other) noexcept; // Move constructor
     ECMatrix& operator=(const ECMatrix& other); // Copy assignment operator
     ECMatrix& operator=(ECMatrix&& other) noexcept; // Move assignment operator
 
-    // Access individual elements (Both Required)
+    // // Access individual elements (Both Required)
     const T& operator()(const std::vector<unsigned>& indices) const; // Only Reads Elements
-    ... operator()(...) ... // Need another overloaded () operator to modify Elements 
+    T& operator()(const std::vector<unsigned>& indices); // Need another overloaded () operator to modify Elements 
 
-    // Utility functions
+    // // Utility functions
     const std::vector<unsigned>& getDimensions() const;
 
     // Matrix-Matrix Operations (+/-/*)
-    .
-    .
-    .
+    
+    template <typename U>
+    friend ECMatrix operator+(const ECMatrix& mat1, const ECMatrix& mat2);
 
-    // Scalar Operations
-    .
-    .
-    .
+    template <typename U>
+    friend ECMatrix operator-(const ECMatrix& mat1, const ECMatrix& mat2);
 
-    // Print Matrix - NOT REQUIRED
-    void display() const;
+    template <typename U>
+    friend ECMatrix operator*(const ECMatrix& mat1, const ECMatrix& mat2);
+
+    // // Scalar Operations
+
+    // template <typename U>
+    // friend ECMatrix operator+(const ECMatrix& mat1, const U scalar);
+
+    //reverse scalar operators
+
 };
 
 #include "ECMatrix.cpp" // Include the implementation file
