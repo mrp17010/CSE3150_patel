@@ -19,7 +19,7 @@ bool Order::processOrder(PaymentMethod* paymentMethod)
         map<Product*, int> prods;
         vector<Product*> cart_items = customer_->getShoppingCart().getItems();
         if(customer_->getShoppingCart().getItems().empty())
-        {return false;}
+        {return true;}
         for(auto in_cart = cart_items.begin(); in_cart != cart_items.end(); in_cart++)
         {
             prods[(*in_cart)] += 1;
