@@ -38,15 +38,30 @@ void InventoryManager::removeProduct(Product* product, int quantity)
 int InventoryManager::getQuantity(const Product& product)
 {
 
+
     int id = product.getId();
-    int quantity = inventory_.at(id);
-    return quantity;
+    auto item = inventory_.find(id);
+    if (item != inventory_.end())
+    {
+        return item->second;
+    }
+    else
+    {
+        return 0;
+    }
+    
 }
 int InventoryManager::getQuantity(int productId)
 {
-
-    int quantity = inventory_.at(productId);
-    return quantity;
+    auto item = inventory_.find(productId);
+    if (item != inventory_.end())
+    {
+        return item->second;
+    }
+    else
+    {
+        return 0;
+    }
 }
 void InventoryManager::reset()
 {

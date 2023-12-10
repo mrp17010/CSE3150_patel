@@ -18,6 +18,8 @@ bool Order::processOrder(PaymentMethod* paymentMethod)
         //get products and quantities from shopping cart, put into map
         map<Product*, int> prods;
         vector<Product*> cart_items = customer_->getShoppingCart().getItems();
+        if(customer_->getShoppingCart().getItems().empty())
+        {return false;}
         for(auto in_cart = cart_items.begin(); in_cart != cart_items.end(); in_cart++)
         {
             prods[(*in_cart)] += 1;
