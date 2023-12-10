@@ -3,13 +3,30 @@
 #include "ECCustomer.h"
 #include "ECCustomerFactory.h"
 #include "ECProductFactory.h"
+#include "ECInventoryManager.h"
+#include "ECPayment.h"
 #include <iostream>
+#include <cassert>
 using namespace std;
 int main()
 {
     CustomerFactory cfac;
     ProductFactory pfac;
+    InventoryManager& inventoryManager = InventoryManager::getInstance();
+    InventoryManager& im2 = InventoryManager::getInstance();
 
+    assert(&inventoryManager==&im2);
+    cout<< &inventoryManager << endl;
+    cout<< &im2 <<endl;
+
+    PaymentMethod* paypalPayment = new PayPal(20);
+    PaymentMethod* creditCardPayment = new CreditCard(0);
+
+    std::cout << "PayPal init. balance: " << paypalPayment->getBalance() << std::endl;
+    paypalPayment->charge(1.0);
+    std::cout << "PayPal init. balance: " << paypalPayment->getBalance() << std::endl;
+
+    std::cout << "Credit card init. balance: " << creditCardPayment->getBalance() << std::endl;
     // RegularCustomer rc = RegularCustomer(1, "reg", 300);
     // PremiumCustomer pc = PremiumCustomer(2, "prem", 4002);
 
@@ -23,6 +40,9 @@ int main()
     Product* myelec = pfac.createProduct(ProductType::Electronics, 2, "laptop", 49.99, "i9");
     Product* mycloth = pfac.createProduct(ProductType::Clothing,3, "shirt", 49.99, "m");
     
+    inventoryManager.addProduct(mybook, 10);
+    std::cout << "Inventory of " << mybook->getName() << ": "
+                << inventoryManager.getQuantity(*mybook) << std::endl;
 
     // rc.getShoppingCart().addToCart(mybook);
     // rc.getShoppingCart().addToCart(myelec);
