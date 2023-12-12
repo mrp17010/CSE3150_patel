@@ -40,11 +40,15 @@ public:
     ECHardIntervalTask(const std::string &tid, int tmStart, int tmEnd);
 
     // your code here..
+    void Run(int tick, int duration) override;
     bool IsReadyToRun(int tick) const override;
     bool IsFinished(int tick) const override;
 
+
 private:
-    bool on_time;    
+    int tmStart;
+    int tmEnd;
+    bool on_time;
 };
 
 //***********************************************************
