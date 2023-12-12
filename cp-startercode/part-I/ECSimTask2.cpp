@@ -76,3 +76,40 @@ bool ECHardIntervalTask::IsFinished(int tick) const
     return false;
 }
 
+ECConsecutiveIntervalTask::ECConsecutiveIntervalTask(const std::string &tid, int tmStartin, int tmEndin): ECSimTask(tid), tmStart(tmStartin), tmEnd(tmEndin), started(false), interrupted(false) {}
+void ECConsecutiveIntervalTask::Run(int tick, int duration)
+{
+    if(tick >= tmStart)
+    {started = true;}
+    ECSimTask::Run(tick, duration);
+}
+void ECConsecutiveIntervalTask::Wait(int tick, int duration)
+{
+    if(started)
+    {
+        interrupted = true;
+    }
+    ECSimTask::Wait(tick, duration);
+
+}
+bool ECConsecutiveIntervalTask::IsReadyToRun(int tick) const
+{
+    int waittime = GetTotWaitTime();
+    if(tick >= tmStart && tick <= tmEnd)
+    {
+        if(!started || (started && !interrupted))
+        {
+            return true;
+        }
+    }
+    return false;
+}
+bool ECConsecutiveIntervalTask::IsFinished(int tick) const
+{
+    int waittime = GetTotWaitTime();
+    if(tick > tmEnd || (started  && interrupted))
+    {
+        return true; 
+    }
+    return false;
+}

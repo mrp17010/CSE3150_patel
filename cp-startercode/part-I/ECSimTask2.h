@@ -59,7 +59,18 @@ class ECConsecutiveIntervalTask : public ECSimTask
 public:
     ECConsecutiveIntervalTask(const std::string &tid, int tmStart, int tmEnd);
     
-    // your code here..    
+    // your code here..
+    bool IsReadyToRun(int tick) const override;
+    bool IsFinished(int tick) const override;
+    void Run(int tick, int duration) override;
+    void Wait(int tick, int duration) override;
+
+private:
+    int tmStart;
+    int tmEnd;
+    bool started;
+    bool interrupted;    
+
 };
 
 //***********************************************************

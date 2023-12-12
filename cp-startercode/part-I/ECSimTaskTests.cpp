@@ -88,31 +88,31 @@ static void Test2()
     ASSERT_EQ( t2.GetTotWaitTime(), 1);
 }
 
-// // Two soft intervals and one consecutive interval
-// static void Test3()
-// {
-//     cout << "****Test3\n";
-//     // FIFO scheduler: two simple tasks
-//     ECSoftIntervalTask t1("t1", 3, 5);
-//     ECSoftIntervalTask t2("t2", 7, 7);
-//     ECConsecutiveIntervalTask t3("t3", 4, 9);
-//     ECSimFIFOTaskScheduler scheduler;
-//     scheduler.AddTask(&t1);
-//     scheduler.AddTask(&t2);
-//     scheduler.AddTask(&t3);
-//     int tmSimTot = 10;
-//     int tmSimRun = scheduler.Simulate(tmSimTot);
-//     // Sim [1, 7]:  t3 stop running at tick 6 and so it finishes
-//     ASSERT_EQ( tmSimRun, 7);
-//     ASSERT_EQ( t1.GetTotRunTime(), 3);
-//     ASSERT_EQ( t1.GetTotWaitTime(), 0);
-//     ASSERT_EQ( t2.GetTotRunTime(), 1);
-//     ASSERT_EQ( t2.GetTotWaitTime(), 0);
-//     // t3 can only run from [6,6]. Since it must be consecutive, it cannot restart after t2
-//     ASSERT_EQ( t3.GetTotRunTime(), 1);
-//     // wait for 3: first waiting [4,5], then [7,7]
-//     ASSERT_EQ( t3.GetTotWaitTime(), 3);
-// }
+// Two soft intervals and one consecutive interval
+static void Test3()
+{
+    cout << "****Test3\n";
+    // FIFO scheduler: two simple tasks
+    ECSoftIntervalTask t1("t1", 3, 5);
+    ECSoftIntervalTask t2("t2", 7, 7);
+    ECConsecutiveIntervalTask t3("t3", 4, 9);
+    ECSimFIFOTaskScheduler scheduler;
+    scheduler.AddTask(&t1);
+    scheduler.AddTask(&t2);
+    scheduler.AddTask(&t3);
+    int tmSimTot = 10;
+    int tmSimRun = scheduler.Simulate(tmSimTot);
+    // Sim [1, 7]:  t3 stop running at tick 6 and so it finishes
+    ASSERT_EQ( tmSimRun, 7);
+    ASSERT_EQ( t1.GetTotRunTime(), 3);
+    ASSERT_EQ( t1.GetTotWaitTime(), 0);
+    ASSERT_EQ( t2.GetTotRunTime(), 1);
+    ASSERT_EQ( t2.GetTotWaitTime(), 0);
+    // t3 can only run from [6,6]. Since it must be consecutive, it cannot restart after t2
+    ASSERT_EQ( t3.GetTotRunTime(), 1);
+    // wait for 3: first waiting [4,5], then [7,7]
+    ASSERT_EQ( t3.GetTotWaitTime(), 3);
+}
 
 // // One soft intervals and one periodic task
 // static void Test4()
@@ -219,11 +219,11 @@ static void Test2()
 
 int main()
 {
-    //Test0();
+    Test0();
 
-    Test1();
-    Test2();
-    // Test3();
+    // Test1();
+    // Test2();
+    Test3();
     // Test4();
     // Test5();
     // Test6();
