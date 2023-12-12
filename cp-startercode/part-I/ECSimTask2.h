@@ -82,7 +82,15 @@ public:
     // tickStart: when to start this periodic task; runLen: how long to run this task each time; sleepLen: after it finishes one run, hong long it will sleep
     ECPeriodicTask(const std::string &tid, int tmStart, int runLen, int sleepLen);
     
-    // your code here..    
+    // your code here..
+    bool IsReadyToRun(int tick) const override;
+    bool IsFinished(int tick) const override;
+private:
+    int tmStart;
+    int runLen;
+    int sleepLen;
+    int period;
+
 };
 
 #endif /* ECSimTask2_h */

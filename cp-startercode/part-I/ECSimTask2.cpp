@@ -113,3 +113,25 @@ bool ECConsecutiveIntervalTask::IsFinished(int tick) const
     }
     return false;
 }
+
+ECPeriodicTask::ECPeriodicTask(const std::string &tid, int tmStartin, int runLenin, int sleepLenin): ECSimTask(tid), tmStart(tmStartin), runLen(runLenin), sleepLen(sleepLenin) {period = runLen + sleepLen;}
+
+bool ECPeriodicTask::IsReadyToRun(int tick) const
+{
+    if(tick >= tmStart)
+    {
+        int offset = (tick - tmStart)%period;
+        if(offset < runLen)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    return false;
+}
+bool ECPeriodicTask::IsFinished(int tick) const{
+    return false;
+}

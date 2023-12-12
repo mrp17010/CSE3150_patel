@@ -114,27 +114,27 @@ static void Test3()
     ASSERT_EQ( t3.GetTotWaitTime(), 3);
 }
 
-// // One soft intervals and one periodic task
-// static void Test4()
-// {
-//     // FIFO scheduler: two simple tasks
-//     cout << "****Test4\n";
-//     ECSoftIntervalTask t1("t1", 3, 5);
-//     ECPeriodicTask t2("t2", 4, 1, 2);  // start at time 4, run for 1 and sleep 2
-//     ECSimFIFOTaskScheduler scheduler;
-//     scheduler.AddTask(&t1);
-//     scheduler.AddTask(&t2);
-//     int tmSimTot = 12;
-//     int tmSimRun = scheduler.Simulate(tmSimTot);
-//     // The periodic task just keeps running
-//     ASSERT_EQ(  tmSimRun,  12);
-//     ASSERT_EQ( t1.GetTotRunTime(), 3);
-//     ASSERT_EQ( t1.GetTotWaitTime(), 0);
-//     // t2 runs: [7,7], [10,10]
-//     ASSERT_EQ( t2.GetTotRunTime(), 2);
-//     // wait: [4,4]
-//     ASSERT_EQ( t2.GetTotWaitTime(), 1);
-// }
+// One soft intervals and one periodic task
+static void Test4()
+{
+    // FIFO scheduler: two simple tasks
+    cout << "****Test4\n";
+    ECSoftIntervalTask t1("t1", 3, 5);
+    ECPeriodicTask t2("t2", 4, 1, 2);  // start at time 4, run for 1 and sleep 2
+    ECSimFIFOTaskScheduler scheduler;
+    scheduler.AddTask(&t1);
+    scheduler.AddTask(&t2);
+    int tmSimTot = 12;
+    int tmSimRun = scheduler.Simulate(tmSimTot);
+    // The periodic task just keeps running
+    ASSERT_EQ(  tmSimRun,  12);
+    ASSERT_EQ( t1.GetTotRunTime(), 3);
+    ASSERT_EQ( t1.GetTotWaitTime(), 0);
+    // t2 runs: [7,7], [10,10]
+    ASSERT_EQ( t2.GetTotRunTime(), 2);
+    // wait: [4,4]
+    ASSERT_EQ( t2.GetTotWaitTime(), 1);
+}
 
 // // Longest wait time first scheudler; two soft intervals
 // static void Test5()
@@ -223,8 +223,8 @@ int main()
 
     // Test1();
     // Test2();
-    Test3();
-    // Test4();
+    // Test3();
+    Test4();
     // Test5();
     // Test6();
     // Test7();
