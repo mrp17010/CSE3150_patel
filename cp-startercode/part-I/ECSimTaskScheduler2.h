@@ -17,7 +17,9 @@ class ECSimLWTFTaskScheduler : public ECSimTaskScheduler
 {
 public:
     ECSimLWTFTaskScheduler();
-    // your code here    
+    // your code here
+protected:
+    ECSimTask *ChooseTaskToSchedule(const std::vector<ECSimTask *> &listReadyTasks) const override; 
 };
 
 //***********************************************************
@@ -27,7 +29,9 @@ class ECSimPriorityScheduler : public ECSimTaskScheduler
 public:
     ECSimPriorityScheduler();
     
-    // your code here    
+    // your code here
+protected:
+    ECSimTask *ChooseTaskToSchedule(const std::vector<ECSimTask *> &listReadyTasks) const override;     
 };
 
 //***********************************************************
@@ -37,7 +41,9 @@ class ECSimRoundRobinTaskScheduler : public ECSimTaskScheduler
 public:
     ECSimRoundRobinTaskScheduler();
     
-    // your code here    
+    // your code here
+protected:
+    ECSimTask *ChooseTaskToSchedule(const std::vector<ECSimTask *> &listReadyTasks) const override;     
 };
 
 

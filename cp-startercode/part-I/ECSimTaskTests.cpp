@@ -136,83 +136,83 @@ static void Test4()
     ASSERT_EQ( t2.GetTotWaitTime(), 1);
 }
 
-// // Longest wait time first scheudler; two soft intervals
-// static void Test5()
-// {
-//     cout << "****Test5\n";
-//     // Longest wait time first scheduler: two simple tasks
-//     ECSoftIntervalTask t1("t1", 3, 10);
-//     ECSoftIntervalTask t2("t2", 5, 13);
-//     ECSimLWTFTaskScheduler scheduler;
-//     scheduler.AddTask(&t1);
-//     scheduler.AddTask(&t2);
-//     int tmSimTot = 10;
-//     int tmSimRun = scheduler.Simulate(tmSimTot);
-//     ASSERT_EQ(tmSimRun, 10);
-//     // the two tasks will take turns to run
-//     // t1: run [3,5],[7,7], [9,9]
-//     ASSERT_EQ( t1.GetTotRunTime(), 5);
-//     // t1: wait [6,6], [8,8], [10,10]. Note: time starts at 1
-//     ASSERT_EQ( t1.GetTotWaitTime(), 3);
-//     // t2: run [6,6], [8,8], [10,10]
-//     ASSERT_EQ( t2.GetTotRunTime(), 3);
-//     // t2: wait [5,5], [7,7], [9,9]
-//     ASSERT_EQ( t2.GetTotWaitTime(), 3);
-// }
+// Longest wait time first scheudler; two soft intervals
+static void Test5()
+{
+    cout << "****Test5\n";
+    // Longest wait time first scheduler: two simple tasks
+    ECSoftIntervalTask t1("t1", 3, 10);
+    ECSoftIntervalTask t2("t2", 5, 13);
+    ECSimLWTFTaskScheduler scheduler;
+    scheduler.AddTask(&t1);
+    scheduler.AddTask(&t2);
+    int tmSimTot = 10;
+    int tmSimRun = scheduler.Simulate(tmSimTot);
+    ASSERT_EQ(tmSimRun, 10);
+    // the two tasks will take turns to run
+    // t1: run [3,5],[7,7], [9,9]
+    ASSERT_EQ( t1.GetTotRunTime(), 5);
+    // t1: wait [6,6], [8,8], [10,10]. Note: time starts at 1
+    ASSERT_EQ( t1.GetTotWaitTime(), 3);
+    // t2: run [6,6], [8,8], [10,10]
+    ASSERT_EQ( t2.GetTotRunTime(), 3);
+    // t2: wait [5,5], [7,7], [9,9]
+    ASSERT_EQ( t2.GetTotWaitTime(), 3);
+}
 
-// // Priority scheudler; two soft intervals
-// static void Test6()
-// {
-//     cout << "****Test6\n";
-//     // Priority scheduler: two simple tasks
-//     ECSoftIntervalTask t1("t1", 3, 10);
-//     ECSoftIntervalTask t2("t2", 5, 13);
-//     // set t2 to priority -1, which is higher than default
-//     t2.SetPriority(-1);
-//     ECSimPriorityScheduler scheduler;
-//     scheduler.AddTask(&t1);
-//     scheduler.AddTask(&t2);
-//     int tmSimTot = 10;
-//     int tmSimRun = scheduler.Simulate(tmSimTot);
-//     ASSERT_EQ(tmSimRun, 10);
-//     // t1: run [3,4]
-//     ASSERT_EQ( t1.GetTotRunTime(), 2);
-//     // t1: wait [5,10]
-//     ASSERT_EQ( t1.GetTotWaitTime(), 6);
-//     // t2: run [5,10]
-//     ASSERT_EQ( t2.GetTotRunTime(), 6);
-//     // t2: wait [5,5], [7,7], [9,9]
-//     ASSERT_EQ( t2.GetTotWaitTime(), 0);
-// }
+// Priority scheudler; two soft intervals
+static void Test6()
+{
+    cout << "****Test6\n";
+    // Priority scheduler: two simple tasks
+    ECSoftIntervalTask t1("t1", 3, 10);
+    ECSoftIntervalTask t2("t2", 5, 13);
+    // set t2 to priority -1, which is higher than default
+    t2.SetPriority(-1);
+    ECSimPriorityScheduler scheduler;
+    scheduler.AddTask(&t1);
+    scheduler.AddTask(&t2);
+    int tmSimTot = 10;
+    int tmSimRun = scheduler.Simulate(tmSimTot);
+    ASSERT_EQ(tmSimRun, 10);
+    // t1: run [3,4]
+    ASSERT_EQ( t1.GetTotRunTime(), 2);
+    // t1: wait [5,10]
+    ASSERT_EQ( t1.GetTotWaitTime(), 6);
+    // t2: run [5,10]
+    ASSERT_EQ( t2.GetTotRunTime(), 6);
+    // t2: wait [5,5], [7,7], [9,9]
+    ASSERT_EQ( t2.GetTotWaitTime(), 0);
+}
 
-// // Round-robiin scheudler; tw0 intervals and one periodic interval
-// static void Test7()
-// {
-//     cout << "****Test7\n";
-//     // Round-robin scheduler: three simple tasks
-//     ECSoftIntervalTask t1("t1", 3, 5);
-//     ECSoftIntervalTask t2("t2", 7, 9);
-//     ECPeriodicTask t3("t3", 2, 2, 1);  // start at time 2, run for 2 and sleep 1
-//     ECSimRoundRobinTaskScheduler scheduler;
-//     scheduler.AddTask(&t1);
-//     scheduler.AddTask(&t2);
-//     scheduler.AddTask(&t3);
-//     int tmSimTot = 10;
-//     int tmSimRun = scheduler.Simulate(tmSimTot);
-//     ASSERT_EQ(tmSimRun, 10);
-//     // t1: run [3,4]: note at time 5, t1 has been schedule twice [3,4] but t3 only once [2,2]. So t3 is preferred
-//     ASSERT_EQ( t1.GetTotRunTime(), 2);
-//     // t1: wait [5,5]]
-//     ASSERT_EQ( t1.GetTotWaitTime(), 1);
-//     // t2: run [7,9]
-//     ASSERT_EQ( t2.GetTotRunTime(), 3);
-//     // t2: wait none
-//     ASSERT_EQ( t2.GetTotWaitTime(), 0);
-//     // t3: run [2,2], [5,6],
-//     ASSERT_EQ( t3.GetTotRunTime(), 3);
-//     // t3: wait [5,5], [8,9]
-//     ASSERT_EQ( t3.GetTotWaitTime(), 3);
-// }
+// Round-robiin scheudler; tw0 intervals and one periodic interval
+static void Test7()
+{
+    cout << "****Test7\n";
+    // Round-robin scheduler: three simple tasks
+    ECSoftIntervalTask t1("t1", 3, 5);
+    ECSoftIntervalTask t2("t2", 7, 9);
+    ECPeriodicTask t3("t3", 2, 2, 1);  // start at time 2, run for 2 and sleep 1
+    ECSimRoundRobinTaskScheduler scheduler;
+    scheduler.AddTask(&t1);
+    scheduler.AddTask(&t2);
+    scheduler.AddTask(&t3);
+    int tmSimTot = 10;
+    int tmSimRun = scheduler.Simulate(tmSimTot);
+    ASSERT_EQ(tmSimRun, 10);
+    // t1: run [3,4]: note at time 5, t1 has been schedule twice [3,4] but t3 only once [2,2]. So t3 is preferred
+    ASSERT_EQ( t1.GetTotRunTime(), 2);
+    // t1: wait [5,5]]
+    ASSERT_EQ( t1.GetTotWaitTime(), 1);
+    // t2: run [7,9]
+    ASSERT_EQ( t2.GetTotRunTime(), 3);
+    // t2: wait none
+    ASSERT_EQ( t2.GetTotWaitTime(), 0);
+    // t3: run [2,2], [5,6],
+    ASSERT_EQ( t3.GetTotRunTime(), 3);
+    // t3: wait [5,5], [8,9]
+    ASSERT_EQ( t3.GetTotWaitTime(), 3);
+}
 
 
 // Un-comment out test cases when you get the implementaiton
@@ -224,8 +224,8 @@ int main()
     // Test1();
     // Test2();
     // Test3();
-    Test4();
-    // Test5();
-    // Test6();
-    // Test7();
+    // Test4();
+    Test5();
+    Test6();
+    Test7();
 }
