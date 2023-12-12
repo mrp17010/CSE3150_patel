@@ -21,7 +21,14 @@ class ECMultiIntervalsTask : public ECSimTask
 {
 public:
     ECMultiIntervalsTask(const std::string &tid);
-    // your code here..    
+    // your code here..
+    bool IsReadyToRun(int tick) const override;
+    bool IsFinished(int tick) const override;
+    void AddInterval(int a, int b);
+
+private:
+    //will always contain an even number of intervals (and 0, which is technically even but it's worth highlighting)
+    std::vector<int> intervals;
 };
 
 //***********************************************************
@@ -31,8 +38,13 @@ class ECHardIntervalTask : public ECSimTask
 {
 public:
     ECHardIntervalTask(const std::string &tid, int tmStart, int tmEnd);
-    
-    // your code here..    
+
+    // your code here..
+    bool IsReadyToRun(int tick) const override;
+    bool IsFinished(int tick) const override;
+
+private:
+    bool on_time;    
 };
 
 //***********************************************************
