@@ -10,11 +10,11 @@ class InventoryManager {
   static InventoryManager& getInstance();
   virtual ~InventoryManager() = default;
 
-  static void addProduct(Product* product, int quantity);
-  static void removeProduct(Product* product, int quantity);
-  static int getQuantity(const Product& product);
-  static int getQuantity(int productId);
-  static void reset();
+  void addProduct(Product* product, int quantity);
+  void removeProduct(Product* product, int quantity);
+  int getQuantity(const Product& product);
+  int getQuantity(int productId);
+  void reset();
 
  private:
   InventoryManager();
@@ -22,6 +22,6 @@ class InventoryManager {
   void operator=(const InventoryManager&) = delete;
 
   std::map<int, int> inventory_;
+  static InventoryManager* instanceptr;
 };
-
 #endif  // ECINVENTORYMANAGER_H

@@ -27,5 +27,19 @@ protected:
 
 // Implement derived classes RegularCustomer and PremiumCustomer
 // Derived classes should provide an implmenetation for calculateDiscount to be able to instantiate the class  
+class RegularCustomer: public Customer
+{
+  public:
+    RegularCustomer(int id, const std::string& name, int loyaltyPoints);
+    ~RegularCustomer();
+    double calculateDiscount() const override;
+};
 
+class PremiumCustomer: public Customer
+{
+  public:
+    PremiumCustomer(int id, const std::string& name, int loyaltyPoints);
+    ~PremiumCustomer();
+    double calculateDiscount() const override;
+};
 #endif  // ECCUSTOMER_H
