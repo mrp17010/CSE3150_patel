@@ -65,59 +65,59 @@ static void Test1()
     ASSERT_EQ( t2.GetTotWaitTime(), 0);
 }
 
-// // A periodic interval and a regular intervaal (which arrives earlier)
-// static void Test2()
-// {
-//     cout << "****Test2\n";
-//     // FIFO scheduler: two simple tasks
-//     ECSimIntervalTask t1("t1", 3, 6);
-//     ECSimIntervalTask t2("t2", 6,9);
-//     // create a periodic version with sleep time 2
-//     ECSimPeriodicTask t1p(&t1, 2);
+// A periodic interval and a regular intervaal (which arrives earlier)
+static void Test2()
+{
+    cout << "****Test2\n";
+    // FIFO scheduler: two simple tasks
+    ECSimIntervalTask t1("t1", 3, 6);
+    ECSimIntervalTask t2("t2", 6,9);
+    // create a periodic version with sleep time 2
+    ECSimPeriodicTask t1p(&t1, 2);
     
-//     ECSimFIFOTaskScheduler scheduler;
-//     // t2 is earlier!
-//     scheduler.AddTask(&t2);
-//     scheduler.AddTask(&t1p);
-//     int tmSimTot = 10;
-//     int tmSimRun = scheduler.Simulate(tmSimTot);
-//     // simulate [1, 10]
-//     ASSERT_EQ(tmSimRun, 10);
-//     // t1p runs: [3,5], [10,10], wait [6,6], [9,9]
-//     ASSERT_EQ( t1p.GetTotRunTime(), 4);
-//     ASSERT_EQ( t1p.GetTotWaitTime(), 2);
-//     // t2 runs: [6,9]. no wai
-//     ASSERT_EQ( t2.GetTotRunTime(), 4);
-//     ASSERT_EQ( t2.GetTotWaitTime(), 0);
-// }
+    ECSimFIFOTaskScheduler scheduler;
+    // t2 is earlier!
+    scheduler.AddTask(&t2);
+    scheduler.AddTask(&t1p);
+    int tmSimTot = 10;
+    int tmSimRun = scheduler.Simulate(tmSimTot);
+    // simulate [1, 10]
+    ASSERT_EQ(tmSimRun, 10);
+    // t1p runs: [3,5], [10,10], wait [6,6], [9,9]
+    ASSERT_EQ( t1p.GetTotRunTime(), 4);
+    ASSERT_EQ( t1p.GetTotWaitTime(), 2);
+    // t2 runs: [6,9]. no wai
+    ASSERT_EQ( t2.GetTotRunTime(), 4);
+    ASSERT_EQ( t2.GetTotWaitTime(), 0);
+}
 
-// // Almost the same as Test2, now t1p is also to be consecutive (i.e., cannot be put to wait)
-// static void Test3()
-// {
-//     cout << "****Test3\n";
-//     // FIFO scheduler: two simple tasks
-//     ECSimIntervalTask t1("t1", 3, 6);
-//     ECSimIntervalTask t2("t2", 6,9);
-//     // create a periodic version with sleep time 2
-//     ECSimPeriodicTask t1p(&t1, 2);
-//     // Make it consecutive
-//     ECSimConsecutiveTask t1pc(&t1p);
+// Almost the same as Test2, now t1p is also to be consecutive (i.e., cannot be put to wait)
+static void Test3()
+{
+    cout << "****Test3\n";
+    // FIFO scheduler: two simple tasks
+    ECSimIntervalTask t1("t1", 3, 6);
+    ECSimIntervalTask t2("t2", 6,9);
+    // create a periodic version with sleep time 2
+    ECSimPeriodicTask t1p(&t1, 2);
+    // Make it consecutive
+    ECSimConsecutiveTask t1pc(&t1p);
     
-//     ECSimFIFOTaskScheduler scheduler;
-//     // t2 is earlier!
-//     scheduler.AddTask(&t2);
-//     scheduler.AddTask(&t1pc);
-//     int tmSimTot = 10;
-//     int tmSimRun = scheduler.Simulate(tmSimTot);
-//     // simulate [1, 9]
-//     ASSERT_EQ(tmSimRun, 9);
-//     // t1p runs: [3,5], wait [6,6] then abort at time right after time 6
-//     ASSERT_EQ( t1pc.GetTotRunTime(), 3);
-//     ASSERT_EQ( t1pc.GetTotWaitTime(), 1);
-//     // t2 runs: [6,9]. no wait
-//     ASSERT_EQ( t2.GetTotRunTime(), 4);
-//     ASSERT_EQ( t2.GetTotWaitTime(), 0);
-// }
+    ECSimFIFOTaskScheduler scheduler;
+    // t2 is earlier!
+    scheduler.AddTask(&t2);
+    scheduler.AddTask(&t1pc);
+    int tmSimTot = 10;
+    int tmSimRun = scheduler.Simulate(tmSimTot);
+    // simulate [1, 9]
+    ASSERT_EQ(tmSimRun, 9);
+    // t1p runs: [3,5], wait [6,6] then abort at time right after time 6
+    ASSERT_EQ( t1pc.GetTotRunTime(), 3);
+    ASSERT_EQ( t1pc.GetTotWaitTime(), 1);
+    // t2 runs: [6,9]. no wait
+    ASSERT_EQ( t2.GetTotRunTime(), 4);
+    ASSERT_EQ( t2.GetTotWaitTime(), 0);
+}
 
 // // Three interval tasks, one with start deadlines and one with end deadlines
 // static void Test4()
@@ -259,9 +259,9 @@ static void Test1()
 int main()
 {
     Test0();
-    Test1();
-    // Test2();
-    // Test3();
+    // Test1();
+    Test2();
+    Test3();
     // Test4();
     // Test5();
     // Test6();

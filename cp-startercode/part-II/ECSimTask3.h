@@ -133,7 +133,7 @@ public:
   ECSimPeriodicTask(ECSimTask *pTask, int lenSleep);
 
   // your code here
-  std::string GetId() const override;
+  std::string GetId() const override {return basetask->GetId();}
   bool IsReadyToRun(int tick) const override;
   bool IsFinished(int tick) const override;
   bool IsAborted(int tick) const override;
@@ -141,7 +141,12 @@ public:
   void Wait(int tick, int duration) override;
   int GetTotWaitTime() const override;
   int GetTotRunTime() const override;
-    
+
+private:
+    ECSimTask *basetask;
+    int lenSleep;
+    int starttime;
+    int baseperiod;
 };
 
 //***********************************************************

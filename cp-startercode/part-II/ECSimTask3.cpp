@@ -90,9 +90,59 @@ int ECSimConsecutiveTask:: GetTotRunTime() const{
 //***********************************************************
 // Periodic task: a task that can early abort
 
-// ECSimPeriodicTask :: ECSimPeriodicTask(ECSimTask *pTask, int ls) 
-// {
-// }
+ECSimPeriodicTask :: ECSimPeriodicTask(ECSimTask *pTask, int ls): basetask(pTask), lenSleep(ls) 
+{
+    int start; 
+    int count = 0;
+    bool foundstart = false;
+
+    while(!(basetask->IsFinished(count)))
+    {
+        if((basetask->IsReadyToRun(count)) && !(foundstart)){
+            foundstart = true;
+            start = count;
+        }
+        count++;
+    }
+    starttime = start;
+    baseperiod = (count-start);
+}
+bool ECSimPeriodicTask:: IsReadyToRun(int tick) const
+{
+    int period = baseperiod + lenSleep;
+    int offset = (tick-starttime)%period;
+    if(offset < baseperiod)
+    {
+        if((tick >= starttime) && basetask->IsReadyToRun(starttime+offset))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    return false;
+}
+bool ECSimPeriodicTask:: IsFinished(int tick) const {
+    return false;
+}
+bool ECSimPeriodicTask:: IsAborted(int tick) const {
+    return false;
+}
+void ECSimPeriodicTask:: Run(int tick, int duration) {
+    basetask->Run(tick, duration);
+}
+void ECSimPeriodicTask:: Wait(int tick, int duration) {
+    basetask->Wait(tick, duration);
+}
+int ECSimPeriodicTask:: GetTotWaitTime() const {
+    return basetask->GetTotWaitTime();
+}
+int ECSimPeriodicTask:: GetTotRunTime() const {
+    return basetask->GetTotRunTime();
+}
+
 
 // your code here
 
