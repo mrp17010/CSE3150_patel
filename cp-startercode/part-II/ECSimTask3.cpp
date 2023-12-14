@@ -149,21 +149,73 @@ int ECSimPeriodicTask:: GetTotRunTime() const {
 //***********************************************************
 // Task with a deadline to start: a task that must start by some time; otherwise terminate
 
-// ECSimStartDeadlineTask :: ECSimStartDeadlineTask(ECSimTask *pTask, int tmStartDeadlineIn) 
-// {
-// }
+ECSimStartDeadlineTask :: ECSimStartDeadlineTask(ECSimTask *pTask, int tmStartDeadlineIn): basetask(pTask), deadline(tmStartDeadlineIn), on_time(false) {}
+bool ECSimStartDeadlineTask:: IsReadyToRun(int tick) const 
+{
+    if(basetask->IsReadyToRun(tick))
+    {
+        if(tick <= deadline || on_time)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+bool ECSimStartDeadlineTask:: IsFinished(int tick) const {
+    return basetask->IsFinished(tick);
+}
+bool ECSimStartDeadlineTask:: IsAborted(int tick) const {
+    return ((tick > deadline) && !(on_time));
+}
+void ECSimStartDeadlineTask:: Run(int tick, int duration) 
+{
+    if(tick <= deadline)
+    {
+        on_time = true;
+    }
+    basetask->Run(tick, duration);
+}
+void ECSimStartDeadlineTask:: Wait(int tick, int duration) {
+    basetask->Wait(tick, duration);
+}
+int ECSimStartDeadlineTask:: GetTotWaitTime() const {
+    return basetask->GetTotWaitTime();
+}
+int ECSimStartDeadlineTask:: GetTotRunTime() const {
+    return basetask->GetTotRunTime();
+}
+
 
 // your code here
 
 //***********************************************************
 // Task must end by some fixed time click: this is useful e.g. when a task is periodic
 
-// ECSimEndDeadlineTask :: ECSimEndDeadlineTask(ECSimTask *pTask, int tmEndDeadlineIn) 
-// {
-// }
+ECSimEndDeadlineTask :: ECSimEndDeadlineTask(ECSimTask *pTask, int tmEndDeadlineIn): basetask(pTask), deadline(tmEndDeadlineIn) 
+{}
 
 // your code here
-
+bool ECSimEndDeadlineTask:: IsReadyToRun(int tick) const {
+    return ((basetask->IsReadyToRun(tick)) && (tick <= deadline));
+}
+bool ECSimEndDeadlineTask:: IsFinished(int tick) const {
+    return ((basetask->IsFinished(tick)) || (tick > deadline));
+}
+bool ECSimEndDeadlineTask:: IsAborted(int tick) const {
+    return (!(basetask->IsFinished(tick)) && (tick > deadline));
+}
+void ECSimEndDeadlineTask:: Run(int tick, int duration) {
+    basetask->Run(tick, duration);
+}
+void ECSimEndDeadlineTask:: Wait(int tick, int duration) {
+    basetask->Wait(tick, duration);
+}
+int ECSimEndDeadlineTask:: GetTotWaitTime() const {
+    return basetask->GetTotWaitTime();
+}
+int ECSimEndDeadlineTask:: GetTotRunTime() const {
+    return basetask->GetTotRunTime();
+}
 //***********************************************************
 // Composite task: contain multiple sub-tasks
 /*

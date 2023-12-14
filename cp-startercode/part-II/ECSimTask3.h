@@ -159,7 +159,7 @@ public:
   ECSimStartDeadlineTask(ECSimTask *pTask, int tmStartDeadline);
 
   // your code here
-  std::string GetId() const override;
+  std::string GetId() const override {return basetask->GetId();}
   bool IsReadyToRun(int tick) const override;
   bool IsFinished(int tick) const override;
   bool IsAborted(int tick) const override;
@@ -167,6 +167,11 @@ public:
   void Wait(int tick, int duration) override;
   int GetTotWaitTime() const override;
   int GetTotRunTime() const override;
+
+private:
+  ECSimTask *basetask;
+  int deadline;
+  bool on_time;
 };
 
 //***********************************************************
@@ -179,7 +184,7 @@ public:
   ECSimEndDeadlineTask(ECSimTask *pTask, int tmEndDeadline);
 
   // your code here
-  std::string GetId() const override;
+  std::string GetId() const override{return basetask->GetId();}
   bool IsReadyToRun(int tick) const override;
   bool IsFinished(int tick) const override;
   bool IsAborted(int tick) const override;
@@ -188,6 +193,9 @@ public:
   int GetTotWaitTime() const override;
   int GetTotRunTime() const override;
     
+private:
+  ECSimTask *basetask;
+  int deadline;
 };
 
 //***********************************************************

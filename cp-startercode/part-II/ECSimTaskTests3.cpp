@@ -119,40 +119,40 @@ static void Test3()
     ASSERT_EQ( t2.GetTotWaitTime(), 0);
 }
 
-// // Three interval tasks, one with start deadlines and one with end deadlines
-// static void Test4()
-// {
-//     cout << "****Test5\n";
-//     // FIFO scheduler: two simple tasks
-//     ECSimIntervalTask t1("t1", 3,7);
-//     ECSimIntervalTask t2("t2", 6,9);
-//     ECSimIntervalTask t3("t3", 4,10);
-//     // t1 has start deadline of 4, end deadline 6
-//     ECSimStartDeadlineTask t1s(&t1, 4);
-//     ECSimEndDeadlineTask t1se(&t1s, 6);
-//     // t2 arrives the first
-//     // t3: start deadline: 7
-//     ECSimStartDeadlineTask t3s(&t3, 7);
+// Three interval tasks, one with start deadlines and one with end deadlines
+static void Test4()
+{
+    cout << "****Test5\n";
+    // FIFO scheduler: two simple tasks
+    ECSimIntervalTask t1("t1", 3,7);
+    ECSimIntervalTask t2("t2", 6,9);
+    ECSimIntervalTask t3("t3", 4,10);
+    // t1 has start deadline of 4, end deadline 6
+    ECSimStartDeadlineTask t1s(&t1, 4);
+    ECSimEndDeadlineTask t1se(&t1s, 6);
+    // t2 arrives the first
+    // t3: start deadline: 7
+    ECSimStartDeadlineTask t3s(&t3, 7);
     
-//     ECSimFIFOTaskScheduler scheduler;
-//     // t2 is earlier!
-//     scheduler.AddTask(&t2);
-//     scheduler.AddTask(&t1se);
-//     scheduler.AddTask(&t3s);
-//     int tmSimTot = 10;
-//     int tmSimRun = scheduler.Simulate(tmSimTot);
-//     // simulate [1, 9]: t3 early abort
-//     ASSERT_EQ(tmSimRun, 9);
-//     // t1se runs: [3,5], wait [6,6] then terminate
-//     ASSERT_EQ( t1se.GetTotRunTime(), 3);
-//     ASSERT_EQ( t1se.GetTotWaitTime(), 1);
-//     // t2 runs: [6,9]. no wait
-//     ASSERT_EQ( t2.GetTotRunTime(), 4);
-//     ASSERT_EQ( t2.GetTotWaitTime(), 0);
-//     // t3s never runs till time 7 and then termiinates by end deadline. Wait: [4,7] (note the wait at time 7 causes it to abort)
-//     ASSERT_EQ(t3s.GetTotRunTime(), 0);
-//     ASSERT_EQ(t3s.GetTotWaitTime(), 4);
-// }
+    ECSimFIFOTaskScheduler scheduler;
+    // t2 is earlier!
+    scheduler.AddTask(&t2);
+    scheduler.AddTask(&t1se);
+    scheduler.AddTask(&t3s);
+    int tmSimTot = 10;
+    int tmSimRun = scheduler.Simulate(tmSimTot);
+    // simulate [1, 9]: t3 early abort
+    ASSERT_EQ(tmSimRun, 9);
+    // t1se runs: [3,5], wait [6,6] then terminate
+    ASSERT_EQ( t1se.GetTotRunTime(), 3);
+    ASSERT_EQ( t1se.GetTotWaitTime(), 1);
+    // t2 runs: [6,9]. no wait
+    ASSERT_EQ( t2.GetTotRunTime(), 4);
+    ASSERT_EQ( t2.GetTotWaitTime(), 0);
+    // t3s never runs till time 7 and then termiinates by end deadline. Wait: [4,7] (note the wait at time 7 causes it to abort)
+    ASSERT_EQ(t3s.GetTotRunTime(), 0);
+    ASSERT_EQ(t3s.GetTotWaitTime(), 4);
+}
 
 // // A composite task with two intervals and a regular intervaal (which arrives earlier)
 // static void Test5()
@@ -260,9 +260,9 @@ int main()
 {
     Test0();
     // Test1();
-    Test2();
-    Test3();
-    // Test4();
+    // Test2();
+    // Test3();
+    Test4();
     // Test5();
     // Test6();
     // Test7(); 
