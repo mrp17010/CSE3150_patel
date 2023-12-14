@@ -35,36 +35,82 @@ bool ECSimIntervalTask :: IsFinished(int tick) const
 //***********************************************************
 // Consecutive task: a task that can early abort
 
-ECSimConsecutiveTask :: ECSimConsecutiveTask(ECSimTask *pTask) 
-{
-}
+ECSimConsecutiveTask :: ECSimConsecutiveTask(ECSimTask *pTask): basetask(pTask), started(false), interrupted(false) {}
 
 // your code here
+
+bool ECSimConsecutiveTask:: IsReadyToRun(int tick) const
+{
+    if(basetask->IsReadyToRun(tick))
+    {
+        if(!started || (started && !interrupted))
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool ECSimConsecutiveTask:: IsFinished(int tick) const{
+    return basetask->IsFinished(tick);
+}
+
+bool ECSimConsecutiveTask:: IsAborted(int tick) const{
+    return (started && interrupted);
+}
+
+void ECSimConsecutiveTask:: Run(int tick, int duration)
+{
+    if(basetask->IsReadyToRun(tick) && !started)
+    {
+        started = true;
+    }
+    basetask->Run(tick, duration);
+
+}
+
+void ECSimConsecutiveTask:: Wait(int tick, int duration)
+{
+    if(started)
+    {
+        interrupted = true;
+    }
+    basetask->Wait(tick, duration);
+}
+
+int ECSimConsecutiveTask:: GetTotWaitTime() const{
+    return basetask->GetTotWaitTime();
+}
+
+int ECSimConsecutiveTask:: GetTotRunTime() const{
+    return basetask->GetTotRunTime();
+}
+
 
 //***********************************************************
 // Periodic task: a task that can early abort
 
-ECSimPeriodicTask :: ECSimPeriodicTask(ECSimTask *pTask, int ls) 
-{
-}
+// ECSimPeriodicTask :: ECSimPeriodicTask(ECSimTask *pTask, int ls) 
+// {
+// }
 
 // your code here
 
 //***********************************************************
 // Task with a deadline to start: a task that must start by some time; otherwise terminate
 
-ECSimStartDeadlineTask :: ECSimStartDeadlineTask(ECSimTask *pTask, int tmStartDeadlineIn) 
-{
-}
+// ECSimStartDeadlineTask :: ECSimStartDeadlineTask(ECSimTask *pTask, int tmStartDeadlineIn) 
+// {
+// }
 
 // your code here
 
 //***********************************************************
 // Task must end by some fixed time click: this is useful e.g. when a task is periodic
 
-ECSimEndDeadlineTask :: ECSimEndDeadlineTask(ECSimTask *pTask, int tmEndDeadlineIn) 
-{
-}
+// ECSimEndDeadlineTask :: ECSimEndDeadlineTask(ECSimTask *pTask, int tmEndDeadlineIn) 
+// {
+// }
 
 // your code here
 
