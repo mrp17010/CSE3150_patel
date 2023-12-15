@@ -66,7 +66,6 @@ void ECSimConsecutiveTask:: Run(int tick, int duration)
         started = true;
     }
     basetask->Run(tick, duration);
-
 }
 
 void ECSimConsecutiveTask:: Wait(int tick, int duration)
@@ -191,8 +190,7 @@ int ECSimStartDeadlineTask:: GetTotRunTime() const {
 //***********************************************************
 // Task must end by some fixed time click: this is useful e.g. when a task is periodic
 
-ECSimEndDeadlineTask :: ECSimEndDeadlineTask(ECSimTask *pTask, int tmEndDeadlineIn): basetask(pTask), deadline(tmEndDeadlineIn) 
-{}
+ECSimEndDeadlineTask :: ECSimEndDeadlineTask(ECSimTask *pTask, int tmEndDeadlineIn): basetask(pTask), deadline(tmEndDeadlineIn) {}
 
 // your code here
 bool ECSimEndDeadlineTask:: IsReadyToRun(int tick) const {
@@ -218,10 +216,80 @@ int ECSimEndDeadlineTask:: GetTotRunTime() const {
 }
 //***********************************************************
 // Composite task: contain multiple sub-tasks
-/*
-ECSimCompositeTask :: ECSimCompositeTask(const std::string &tidIn) 
-{
+
+ECSimCompositeTask :: ECSimCompositeTask(const std::string &tidIn): tid(tidIn) {}
+void ECSimCompositeTask:: AddSubtask(ECSimTask *pt) {
+    tasks.push_back(pt);
 }
-*/
+bool ECSimCompositeTask:: IsReadyToRun(int tick) const {
+    vector<ECSimTask*> ready = _ReadyTasks(tick);
+    if(ready.empty())
+    {
+        return false;
+    }
+    return true;
+}
+bool ECSimCompositeTask:: IsFinished(int tick) const 
+{
+    for(auto task = tasks.begin(); task != tasks.end(); task++)
+    {
+        if(!((*task)->IsFinished(tick)) || !((*task)->IsAborted(tick)))
+        {
+            return false;
+        }
+    }
+    return true;
+}
+bool ECSimCompositeTask:: IsAborted(int tick) const 
+{
+    return IsFinished(tick);
+}
+void ECSimCompositeTask:: Run(int tick, int duration) 
+{
+    vector<ECSimTask*> ready = _ReadyTasks(tick);
+    ECSimTask *first_task = *(ready.begin());
+    first_task->Run(tick, duration);
+    for(auto rest = next(ready.begin()); rest != ready.end(); rest++)
+    {
+        (*rest)->Wait(tick, duration);
+    }
+}
+void ECSimCompositeTask:: Wait(int tick, int duration) 
+{
+    vector<ECSimTask*> ready = _ReadyTasks(tick);
+    for(auto task = ready.begin(); task!=ready.end();task++)
+    {
+        (*task)->Wait(tick, duration);
+    }
+}
+int ECSimCompositeTask:: GetTotWaitTime() const
+{
+    int sum = 0;
+    for(auto task = tasks.begin(); task != tasks.end(); task++){
+        sum += (*task)->GetTotWaitTime();
+    }
+    return sum;
+}
+int ECSimCompositeTask:: GetTotRunTime() const
+{
+    int sum = 0;
+    for(auto task = tasks.begin(); task != tasks.end(); task++){
+        sum += (*task)->GetTotRunTime();
+    }
+    return sum;
+}
+vector<ECSimTask*> ECSimCompositeTask:: _ReadyTasks(int tick) const 
+{
+    vector<ECSimTask*> readytasks;
+    for(auto task = tasks.begin(); task != tasks.end(); task++)
+    {
+        if((*task)->IsReadyToRun(tick))
+        {
+            readytasks.push_back(*task);
+        }
+    }
+    return readytasks;
+}
+
 
 // your code here

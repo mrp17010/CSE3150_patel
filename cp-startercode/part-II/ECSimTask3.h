@@ -200,13 +200,14 @@ private:
 
 //***********************************************************
 // Composite task: contain multiple sub-tasks
-
-class ECSimCompositeTask : public ECSimIntervalTask
+//I don't know why it's inheriting from ECSimIntervalTask
+//changed it to ECSimTask... will ask on piazza about it
+class ECSimCompositeTask : public ECSimTask //ECSimIntervalTask
 {
 public:
   ECSimCompositeTask(const std::string &tidIn);
     
-  virtual std::string GetId() const override;
+  virtual std::string GetId() const override { return this->tid; }
     
   // Add subtask
   void AddSubtask(ECSimTask *pt);
@@ -219,6 +220,14 @@ public:
   void Wait(int tick, int duration) override;
   int GetTotWaitTime() const override;
   int GetTotRunTime() const override;
+
+ private:
+  std::vector <ECSimTask*> tasks;
+  std::string tid;
+
+  std::vector<ECSimTask*> _ReadyTasks(int tick) const;
+
+
     
 };
 

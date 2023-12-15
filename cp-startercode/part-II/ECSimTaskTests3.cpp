@@ -154,103 +154,103 @@ static void Test4()
     ASSERT_EQ(t3s.GetTotWaitTime(), 4);
 }
 
-// // A composite task with two intervals and a regular intervaal (which arrives earlier)
-// static void Test5()
-// {
-//     cout << "****Test5\n";
-//     // FIFO scheduler: two simple tasks
-//     ECSimIntervalTask t11("t11", 1, 4);
-//     ECSimIntervalTask t12("t12", 7,9);
-//     ECSimIntervalTask t2("t2", 3, 5 );
-//     // create a composite
-//     ECSimCompositeTask t1c("t1c");
-//     t1c.AddSubtask(&t11);
-//     t1c.AddSubtask(&t12);
-//     ECSimFIFOTaskScheduler scheduler;
-//     // t2 is earlier!
-//     scheduler.AddTask(&t2);
-//     scheduler.AddTask(&t1c);
-//     int tmSimTot = 10;
-//     int tmSimRun = scheduler.Simulate(tmSimTot);
-//     // simulate [1, 9]
-//     ASSERT_EQ(tmSimRun, 9);
-//     // t1c runs: [1,2], [7,9], wait [3,4]
-//     ASSERT_EQ( t1c.GetTotRunTime(), 5);
-//     ASSERT_EQ( t1c.GetTotWaitTime(), 2);
-//     // t2 runs: [3,5]. no wai
-//     ASSERT_EQ( t2.GetTotRunTime(), 3);
-//     ASSERT_EQ( t2.GetTotWaitTime(), 0);
-// }
+// A composite task with two intervals and a regular intervaal (which arrives earlier)
+static void Test5()
+{
+    cout << "****Test5\n";
+    // FIFO scheduler: two simple tasks
+    ECSimIntervalTask t11("t11", 1, 4);
+    ECSimIntervalTask t12("t12", 7,9);
+    ECSimIntervalTask t2("t2", 3, 5 );
+    // create a composite
+    ECSimCompositeTask t1c("t1c");
+    t1c.AddSubtask(&t11);
+    t1c.AddSubtask(&t12);
+    ECSimFIFOTaskScheduler scheduler;
+    // t2 is earlier!
+    scheduler.AddTask(&t2);
+    scheduler.AddTask(&t1c);
+    int tmSimTot = 10;
+    int tmSimRun = scheduler.Simulate(tmSimTot);
+    // simulate [1, 9]
+    ASSERT_EQ(tmSimRun, 9);
+    // t1c runs: [1,2], [7,9], wait [3,4]
+    ASSERT_EQ( t1c.GetTotRunTime(), 5);
+    ASSERT_EQ( t1c.GetTotWaitTime(), 2);
+    // t2 runs: [3,5]. no wai
+    ASSERT_EQ( t2.GetTotRunTime(), 3);
+    ASSERT_EQ( t2.GetTotWaitTime(), 0);
+}
 
-// // Continue from the previous. Now the composite task has an ending deadline 18 and is periodic (with waiting gap time 2)...
-// static void Test6()
-// {
-//     cout << "****Test6\n";
-//     // FIFO scheduler: two simple tasks
-//     ECSimIntervalTask t11("t11", 1, 4);
-//     ECSimIntervalTask t12("t12", 7,9);
-//     ECSimIntervalTask t2("t2", 8, 13 );
-//     // create a composite
-//     ECSimCompositeTask t1c("t1c");
-//     t1c.AddSubtask(&t11);
-//     t1c.AddSubtask(&t12);
-//     // periodic with wait gap 2
-//     ECSimPeriodicTask t1cp(&t1c, 2);
-//     // ending deadline
-//     ECSimEndDeadlineTask t1cep(&t1cp, 18);
+// Continue from the previous. Now the composite task has an ending deadline 18 and is periodic (with waiting gap time 2)...
+static void Test6()
+{
+    cout << "****Test6\n";
+    // FIFO scheduler: two simple tasks
+    ECSimIntervalTask t11("t11", 1, 4);
+    ECSimIntervalTask t12("t12", 7,9);
+    ECSimIntervalTask t2("t2", 8, 13 );
+    // create a composite
+    ECSimCompositeTask t1c("t1c");
+    t1c.AddSubtask(&t11);
+    t1c.AddSubtask(&t12);
+    // periodic with wait gap 2
+    ECSimPeriodicTask t1cp(&t1c, 2);
+    // ending deadline
+    ECSimEndDeadlineTask t1cep(&t1cp, 18);
     
-//     ECSimFIFOTaskScheduler scheduler;
-//     // t2 is earlier!
-//     scheduler.AddTask(&t2);
-//     scheduler.AddTask(&t1cep);
-//     int tmSimTot = 20;
-//     int tmSimRun = scheduler.Simulate(tmSimTot);
-//     // simulate [1, 18]
-//     ASSERT_EQ(tmSimRun, 18);
-//     // t1cep runs: [1,4], [7,7], [14,15], [18,18]  wait [8,9], [12,13]
-//     ASSERT_EQ( t1cep.GetTotRunTime(), 8);
-//     ASSERT_EQ( t1cep.GetTotWaitTime(), 4);
-//     // t2 runs: [8,13]. no wai
-//     ASSERT_EQ( t2.GetTotRunTime(), 6);
-//     ASSERT_EQ( t2.GetTotWaitTime(), 0);
-// }
+    ECSimFIFOTaskScheduler scheduler;
+    // t2 is earlier!
+    scheduler.AddTask(&t2);
+    scheduler.AddTask(&t1cep);
+    int tmSimTot = 20;
+    int tmSimRun = scheduler.Simulate(tmSimTot);
+    // simulate [1, 18]
+    ASSERT_EQ(tmSimRun, 18);
+    // t1cep runs: [1,4], [7,7], [14,15], [18,18]  wait [8,9], [12,13]
+    ASSERT_EQ( t1cep.GetTotRunTime(), 8);
+    ASSERT_EQ( t1cep.GetTotWaitTime(), 4);
+    // t2 runs: [8,13]. no wai
+    ASSERT_EQ( t2.GetTotRunTime(), 6);
+    ASSERT_EQ( t2.GetTotWaitTime(), 0);
+}
 
-// // A composite task is consecutive, and is periodic (with waiting gap time 2). The 2nd task is periodic (comes first), with a ending deadline...
-// static void Test7()
-// {
-//     cout << "****Test7\n";
-//     // FIFO scheduler: two simple tasks
-//     ECSimIntervalTask t11("t11", 1, 2);
-//     ECSimIntervalTask t12("t12", 4,4);
-//     ECSimIntervalTask t2("t2", 8, 13 );
-//     // create a composite
-//     ECSimCompositeTask t1c("t1c");
-//     t1c.AddSubtask(&t11);
-//     t1c.AddSubtask(&t12);
-//     // periodic
-//     ECSimPeriodicTask t1cp(&t1c, 2);
-//     // consecutive
-//     ECSimConsecutiveTask t1cpc(&t1cp);
-//     // periodic
-//     ECSimPeriodicTask t2p(&t2, 2);
-//     // Also has an ending deadline
-//     ECSimEndDeadlineTask t2pe(&t2p, 18);
+// A composite task is consecutive, and is periodic (with waiting gap time 2). The 2nd task is periodic (comes first), with a ending deadline...
+static void Test7()
+{
+    cout << "****Test7\n";
+    // FIFO scheduler: two simple tasks
+    ECSimIntervalTask t11("t11", 1, 2);
+    ECSimIntervalTask t12("t12", 4,4);
+    ECSimIntervalTask t2("t2", 8, 13 );
+    // create a composite
+    ECSimCompositeTask t1c("t1c");
+    t1c.AddSubtask(&t11);
+    t1c.AddSubtask(&t12);
+    // periodic
+    ECSimPeriodicTask t1cp(&t1c, 2);
+    // consecutive
+    ECSimConsecutiveTask t1cpc(&t1cp);
+    // periodic
+    ECSimPeriodicTask t2p(&t2, 2);
+    // Also has an ending deadline
+    ECSimEndDeadlineTask t2pe(&t2p, 18);
     
-//     ECSimFIFOTaskScheduler scheduler;
-//     // t2pe is earlier!
-//     scheduler.AddTask(&t2pe);
-//     scheduler.AddTask(&t1cpc);
-//     int tmSimTot = 20;
-//     int tmSimRun = scheduler.Simulate(tmSimTot);
-//     // simulate [1, 18]
-//     ASSERT_EQ(tmSimRun, 18);
-//     // t1cpc runs: [1,2], [4,4], [7,7], then end  wait [8,8]
-//     ASSERT_EQ( t1cpc.GetTotRunTime(), 4);
-//     ASSERT_EQ( t1cpc.GetTotWaitTime(), 1);
-//     // t2pe runs: [8,13], [16,18] no wait
-//     ASSERT_EQ( t2pe.GetTotRunTime(), 9);
-//     ASSERT_EQ( t2pe.GetTotWaitTime(), 0);
-// }
+    ECSimFIFOTaskScheduler scheduler;
+    // t2pe is earlier!
+    scheduler.AddTask(&t2pe);
+    scheduler.AddTask(&t1cpc);
+    int tmSimTot = 20;
+    int tmSimRun = scheduler.Simulate(tmSimTot);
+    // simulate [1, 18]
+    ASSERT_EQ(tmSimRun, 18);
+    // t1cpc runs: [1,2], [4,4], [7,7], then end  wait [8,8]
+    ASSERT_EQ( t1cpc.GetTotRunTime(), 4);
+    ASSERT_EQ( t1cpc.GetTotWaitTime(), 1);
+    // t2pe runs: [8,13], [16,18] no wait
+    ASSERT_EQ( t2pe.GetTotRunTime(), 9);
+    ASSERT_EQ( t2pe.GetTotWaitTime(), 0);
+}
 
 
 
@@ -262,8 +262,8 @@ int main()
     // Test1();
     // Test2();
     // Test3();
-    Test4();
-    // Test5();
-    // Test6();
-    // Test7(); 
+    //Test4();
+    Test5();
+    Test6();
+    Test7(); 
 }
