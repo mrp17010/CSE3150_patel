@@ -227,8 +227,6 @@ public:
 
   std::vector<ECSimTask*> _ReadyTasks(int tick) const;
 
-
-    
 };
 
 #endif /* ECSimTask3_h */

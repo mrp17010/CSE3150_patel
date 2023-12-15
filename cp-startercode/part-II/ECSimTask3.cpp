@@ -30,8 +30,6 @@ bool ECSimIntervalTask :: IsFinished(int tick) const
 {
     return tick > tmEnd;
 }
-
-
 //***********************************************************
 // Consecutive task: a task that can early abort
 
@@ -84,11 +82,8 @@ int ECSimConsecutiveTask:: GetTotWaitTime() const{
 int ECSimConsecutiveTask:: GetTotRunTime() const{
     return basetask->GetTotRunTime();
 }
-
-
 //***********************************************************
 // Periodic task: a task that can early abort
-
 ECSimPeriodicTask :: ECSimPeriodicTask(ECSimTask *pTask, int ls): basetask(pTask), lenSleep(ls) 
 {
     int start; 
@@ -106,6 +101,8 @@ ECSimPeriodicTask :: ECSimPeriodicTask(ECSimTask *pTask, int ls): basetask(pTask
     starttime = start;
     baseperiod = (count-start);
 }
+// your code here
+
 bool ECSimPeriodicTask:: IsReadyToRun(int tick) const
 {
     int period = baseperiod + lenSleep;
@@ -130,10 +127,14 @@ bool ECSimPeriodicTask:: IsAborted(int tick) const {
     return false;
 }
 void ECSimPeriodicTask:: Run(int tick, int duration) {
-    basetask->Run(tick, duration);
+    int period = baseperiod + lenSleep;
+    int offset = (tick-starttime)%period;
+    basetask->Run(starttime+offset, duration);
 }
 void ECSimPeriodicTask:: Wait(int tick, int duration) {
-    basetask->Wait(tick, duration);
+    int period = baseperiod + lenSleep;
+    int offset = (tick-starttime)%period;
+    basetask->Wait(starttime+offset, duration);
 }
 int ECSimPeriodicTask:: GetTotWaitTime() const {
     return basetask->GetTotWaitTime();
@@ -141,9 +142,6 @@ int ECSimPeriodicTask:: GetTotWaitTime() const {
 int ECSimPeriodicTask:: GetTotRunTime() const {
     return basetask->GetTotRunTime();
 }
-
-
-// your code here
 
 //***********************************************************
 // Task with a deadline to start: a task that must start by some time; otherwise terminate
@@ -183,8 +181,6 @@ int ECSimStartDeadlineTask:: GetTotWaitTime() const {
 int ECSimStartDeadlineTask:: GetTotRunTime() const {
     return basetask->GetTotRunTime();
 }
-
-
 // your code here
 
 //***********************************************************
@@ -233,7 +229,7 @@ bool ECSimCompositeTask:: IsFinished(int tick) const
 {
     for(auto task = tasks.begin(); task != tasks.end(); task++)
     {
-        if(!((*task)->IsFinished(tick)) || !((*task)->IsAborted(tick)))
+        if( !((*task)->IsFinished(tick)) )
         {
             return false;
         }
@@ -242,7 +238,14 @@ bool ECSimCompositeTask:: IsFinished(int tick) const
 }
 bool ECSimCompositeTask:: IsAborted(int tick) const 
 {
-    return IsFinished(tick);
+    for(auto task = tasks.begin(); task != tasks.end(); task++)
+    {
+        if( !((*task)->IsAborted(tick)) )
+        {
+            return false;
+        }
+    }
+    return true;
 }
 void ECSimCompositeTask:: Run(int tick, int duration) 
 {
@@ -290,6 +293,5 @@ vector<ECSimTask*> ECSimCompositeTask:: _ReadyTasks(int tick) const
     }
     return readytasks;
 }
-
 
 // your code here
